@@ -1,4 +1,4 @@
-const {userViewModel, receitaViewModel, despesaViewModel} = require('../view/managerView')
+const { userViewModel, receitaViewModel, despesaViewModel } = require('../view/managerView')
 
 module.exports =
 {
@@ -13,6 +13,26 @@ module.exports =
         } catch (erro) {
             return res.json({ "success": false, "erro": JSON.stringify(erro) });
         };
+    },
+
+    async GetEmail(req, res) {
+        try {
+            const { email } = req.params;
+
+            if (!email) {
+                return res.status(400).json({ sucesso: false, mensagem: 'Email não fornecido.' });
+            }
+
+            const user = await userViewModel.findOne({ email });
+
+            if (!user) {
+                return res.json({ sucesso: false, mensagem: 'Usuário não encontrado com este e-mail.' });
+            }
+
+            return res.json({ sucesso: true, usuario: user });
+        } catch (erro) {
+            return res.status(500).json({ sucesso: false, erro: erro.message });
+        }
     },
 
     async Post(req, res) {

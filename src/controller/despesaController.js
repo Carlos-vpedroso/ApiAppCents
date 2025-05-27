@@ -15,6 +15,26 @@ module.exports =
         };
     },
 
+    async GetByUsuarioId(req, res) {
+        try {
+            const { usuario } = req.params;
+
+            if (!usuario) {
+                return res.status(400).json({ sucesso: false, mensagem: 'ID do usuário é obrigatório.' });
+            }
+
+            const despesas = await despesaViewModel.find({ usuario });
+
+            if (despesas.length === 0) {
+                return res.json({ sucesso: false, mensagem: 'Nenhuma despesa encontrada para este usuário.' });
+            }
+
+            return res.json({ sucesso: true, despesas });
+        } catch (erro) {
+            return res.status(500).json({ sucesso: false, erro: erro.message });
+        }
+    },
+
     async Post(req, res) {
         try {
             const usuarioId = req.params.usuarioId; // <- pega o ID da URL
