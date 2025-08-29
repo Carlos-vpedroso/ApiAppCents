@@ -1,14 +1,18 @@
-const mongoose = require('mongoose')
-const userModel = require('../models/user')
-const receitaModel = require('../models/receita')
-const despesaModel = require('../models/despesa')
+const mongoose = require('mongoose');
+const userModel = require('../models/user');
+const transacoesModel = require('../models/transacoes');
+const metasModel = require('../models/metas');
+const categoriasModel = require('../models/categorias');
 
-const userViewModel = mongoose.model('users', userModel);
-const receitaViewModel = mongoose.model('receitas', receitaModel);
-const despesaViewModel = mongoose.model('despesas', despesaModel);
+const userViewModel = mongoose.model('usuarios', userModel);
+const transacoesViewModel = mongoose.model('transacoes', transacoesModel);
+const metasViewModel = mongoose.model('metas', metasModel);
+const categoriasViewModel = mongoose.model('categorias', categoriasModel);
+
 
 module.exports = {
     userViewModel,
-    receitaViewModel,
-    despesaViewModel
-}
+    transacoesViewModel,
+    metasViewModel,
+    categoriasViewModel
+};

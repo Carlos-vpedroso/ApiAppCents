@@ -4,14 +4,18 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        match: /\S+@\S+\.\S+/
     },
     senha: {
         type: String,
-        required: true
+        required: true,
+        minlength: 6
     }
 }, {
-    collection: 'meus_usuarios'
+    collection: 'usuarios'
 });
 
 module.exports = userSchema;
