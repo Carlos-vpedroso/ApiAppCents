@@ -28,9 +28,7 @@ const Post = async (req, res) => {
             data: data || Date.now()
         });
 
-        const transacaoPopulada = await transacao.populate('usuario').populate('categoria');
-
-        res.status(201).json(transacaoPopulada);
+        res.status(201).json(transacao);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
