@@ -16,6 +16,27 @@ const Get = async (req, res) => {
     };
 };
 
+const GetById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ Success: false, Message: "ID do usuário é obrigatório." });
+    }
+
+    const user = await userViewModel.findById(id, 'nome email');
+
+    if (!user) {
+      return res.status(404).json({ Success: false, Message: "Usuário não encontrado." });
+    }
+
+    return res.json({ Success: true, Data: user });
+  } catch (error) {
+    return res.status(500).json({ Success: false, Error: error.message });
+  }
+};
+
+
 const Post = async (req, res) => {
     try {
         const dados = req.body;
@@ -176,6 +197,7 @@ const RefreshToken = async (req, res) => {
 
 module.exports = {
     Get,
+    GetById,
     Post,
     Put,
     Delete,

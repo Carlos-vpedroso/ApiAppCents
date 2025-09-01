@@ -9,6 +9,7 @@ const metasController = require('../controller/metasController');
 
 //#region ROTAS DAS REQUISICOES DOS USUARIOS
 routes.get('/usuario', userController.Get);
+routes.get('/usuario/:id', userController.GetById);
 routes.post('/usuario/login', userController.PostEmail);
 routes.post('/usuario/registrar', userController.Post);
 routes.post('/usuario/refreshToken', userController.RefreshToken);
