@@ -29,18 +29,19 @@ const Post = async (req, res) => {
             return res.json({ Success: false, Message: "Email já cadastrado." });
         }
 
-        const { email, senha } = dados;
+        const { nome, email, senha } = dados;
 
         // 🔑 Criptografar senha antes de salvar
         const hashedPassword = await bcrypt.hash(senha, 10);
 
-        const newUser = new userViewModel({ email, senha: hashedPassword });
+        const newUser = new userViewModel({ nome, email, senha: hashedPassword });
         const savedUser = await newUser.save();
 
         // --- Criar categorias padrão ---
         const categoriasPadrao = [
             { nome: "Alimentação", tipo: "despesa", cor: "#FF5733", usuario: savedUser._id },
             { nome: "Transporte", tipo: "despesa", cor: "#33C3FF", usuario: savedUser._id },
+            { nome: "Assinatura", tipo: "despesa", cor: "#1DA1F2", usuario: savedUser._id },
             { nome: "Salário", tipo: "receita", cor: "#28A745", usuario: savedUser._id },
             { nome: "Investimentos", tipo: "receita", cor: "#FFD700", usuario: savedUser._id }
         ];
@@ -53,11 +54,10 @@ const Post = async (req, res) => {
     }
 };
 
-
 const Put = async (req, res) => {
     try {
         const { id } = req.params;
-        let { email, senha } = req.body;
+        let { nome, email, senha } = req.body;
 
         // Se senha foi enviada, criptografa novamente
         if (senha) {
@@ -66,7 +66,7 @@ const Put = async (req, res) => {
 
         const updatedUser = await userViewModel.findByIdAndUpdate(
             id,
-            { email, senha },
+            { nome, email, senha },
             { new: true }
         );
 
@@ -99,8 +99,6 @@ const Delete = async (req, res) => {
     }
 };
 
-
-
 const PostEmail = async (req, res) => {
     try {
         const { email, senha } = req.body;
@@ -126,7 +124,7 @@ const PostEmail = async (req, res) => {
         const refreshToken = jwt.sign(
             { id: user._id },
             process.env.JWT_REFRESH_SECRET,
-            { expiresIn: "7d" } // 7 dias
+            { expiresIn: "30d" } // 30 dias
         );
 
         return res.json({
@@ -158,10 +156,18 @@ const RefreshToken = async (req, res) => {
             { expiresIn: "1d" }
         );
 
+        const newRefreshToken = jwt.sign(
+            { id: user._id },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: "30d" } // 30 dias
+        );
+
         return res.json({
             Success: true,
             Message: "Access token renovado com sucesso.",
-            AccessToken: newAccessToken
+            AccessToken: newAccessToken,
+            UserId: decoded.id,
+            newRefreshToken
         });
     } catch (err) {
         return res.status(403).json({ Success: false, Message: "Refresh token inválido ou expirado." });

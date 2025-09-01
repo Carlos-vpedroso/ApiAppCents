@@ -11,6 +11,7 @@ const metasController = require('../controller/metasController');
 routes.get('/usuario', userController.Get);
 routes.post('/usuario/login', userController.PostEmail);
 routes.post('/usuario/registrar', userController.Post);
+routes.post('/usuario/refreshToken', userController.RefreshToken);
 routes.put('/usuario/:id', userController.Put);
 routes.delete('/usuario/:id', userController.Delete);
 //#endregion
@@ -18,6 +19,11 @@ routes.delete('/usuario/:id', userController.Delete);
 //#region ROTAS DAS REQUISICOES DAS TRANSAÇÕES
 routes.get('/transacao', transacoesController.GetAll);
 routes.get('/transacao/usuario/:usuarioId', transacoesController.GetByUsuarioId);
+routes.get('/transacao/recentes/:usuarioId', transacoesController.GetUltimasTransacoes);
+routes.get('/transacao/receitas/despesas/:usuarioId', transacoesController.GetResumoMesAtual);
+routes.get('/transacao/despesas/categoria/:usuarioId', transacoesController.GetDespesasPorCategoria);
+routes.get('/transacao/despesas/assinatura/:usuarioId', transacoesController.GetAssinaturas);
+routes.get('/transacao/6meses/:usuarioId', transacoesController.GetResumo6Meses);
 routes.post('/transacao/cadastrar', transacoesController.Post);
 //#endregion
 
