@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { userViewModel, categoriasViewModel } = require('../view/managerView');
+const { userViewModel, categoriasViewModel, transacoesViewModel, metasViewModel } = require('../view/managerView');
 
 
 const Get = async (req, res) => {
@@ -122,8 +122,9 @@ const Delete = async (req, res) => {
             return res.json({ Success: false, Message: "Usuário não encontrado." });
         }
 
-        await receitaViewModel.deleteMany({ usuario: id });
-        await despesaViewModel.deleteMany({ usuario: id });
+        await categoriasViewModel.deleteMany({ usuario: id });
+        await transacoesViewModel.deleteMany({ usuario: id });
+        await metasViewModel.deleteMany({ usuario: id });
         await userViewModel.findByIdAndDelete(id);
 
         return res.json({ Success: true, Message: "Usuário e registros vinculados excluídos com sucesso." });
