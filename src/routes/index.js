@@ -26,6 +26,9 @@ routes.get('/transacao/despesas/categoria/:usuarioId', transacoesController.GetD
 routes.get('/transacao/despesas/assinatura/:usuarioId', transacoesController.GetAssinaturas);
 routes.get('/transacao/6meses/:usuarioId', transacoesController.GetResumo6Meses);
 routes.post('/transacao/cadastrar', transacoesController.Post);
+routes.put('/transacao/editar/:id', transacoesController.Put);
+routes.delete('/transacao/deletar/:id', transacoesController.Delete);
+
 //#endregion
 
 //#region ROTAS DAS REQUISICOES DAS CATEGORIAS

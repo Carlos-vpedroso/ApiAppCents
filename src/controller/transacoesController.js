@@ -313,40 +313,41 @@ const GetDespesasPorCategoria = async (req, res) => {
 };
 
 const GetAssinaturas = async (req, res) => {
-  try {
-    const usuarioId = req.params.usuarioId;
+    try {
+        const usuarioId = req.params.usuarioId;
 
-    if (!usuarioId) {
-      return res.status(400).json({ message: 'ID do usuário é obrigatório.' });
+        if (!usuarioId) {
+            return res.status(400).json({ message: 'ID do usuário é obrigatório.' });
+        }
+
+        // Busca todas as despesas do tipo "Assinatura"
+        const assinaturas = await transacoesViewModel.find({
+            usuario: new mongoose.Types.ObjectId(usuarioId),
+            tipo: "despesa"
+        })
+            .populate('categoria', 'nome')
+            .sort({ data: -1 });
+
+        // Filtrar somente categoria Assinatura
+        const resultado = assinaturas
+            .filter(item => item.categoria?.nome.toLowerCase() === "assinatura")
+            .map(item => ({
+                _id: item._id,
+                name: item.descricao,
+                valor: item.valor,
+                data: new Date(item.data).toLocaleDateString("pt-BR")
+            }));
+
+        if (resultado.length === 0) {
+            return res.status(404).json({ message: 'Nenhuma assinatura encontrada para este usuário.' });
+        }
+
+        res.json(resultado);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
-
-    // Busca todas as despesas do tipo "Assinatura"
-    const assinaturas = await transacoesViewModel.find({
-      usuario: new mongoose.Types.ObjectId(usuarioId),
-      tipo: "despesa"
-    })
-      .populate('categoria', 'nome')
-      .sort({ data: -1 });
-
-    // Filtrar somente categoria Assinatura
-    const resultado = assinaturas
-      .filter(item => item.categoria?.nome.toLowerCase() === "assinatura")
-      .map(item => ({
-        name: item.descricao,   // nome da assinatura (Netflix, Spotify...)
-        valor: item.valor,      // preço
-        data: new Date(item.data).toLocaleDateString("pt-BR") // data formatada
-      }));
-
-    if (resultado.length === 0) {
-      return res.status(404).json({ message: 'Nenhuma assinatura encontrada para este usuário.' });
-    }
-
-    res.json(resultado);
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
-  }
 };
 
 // Atualizar transação
