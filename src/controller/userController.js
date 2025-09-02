@@ -223,7 +223,7 @@ const UploadFoto = async (req, res) => {
             overwrite: true,
         });
 
-        const user = await userModel.findByIdAndUpdate(
+        const user = await userViewModel.findByIdAndUpdate(
             id,
             { foto: result.secure_url },
             { new: true }
