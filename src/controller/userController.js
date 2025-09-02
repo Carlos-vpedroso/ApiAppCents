@@ -17,23 +17,23 @@ const Get = async (req, res) => {
 };
 
 const GetById = async (req, res) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    if (!id) {
-      return res.status(400).json({ Success: false, Message: "ID do usuário é obrigatório." });
+        if (!id) {
+            return res.status(400).json({ Success: false, Message: "ID do usuário é obrigatório." });
+        }
+
+        const user = await userViewModel.findById(id, 'nome email');
+
+        if (!user) {
+            return res.status(404).json({ Success: false, Message: "Usuário não encontrado." });
+        }
+
+        return res.json({ Success: true, Data: user });
+    } catch (error) {
+        return res.status(500).json({ Success: false, Error: error.message });
     }
-
-    const user = await userViewModel.findById(id, 'nome email');
-
-    if (!user) {
-      return res.status(404).json({ Success: false, Message: "Usuário não encontrado." });
-    }
-
-    return res.json({ Success: true, Data: user });
-  } catch (error) {
-    return res.status(500).json({ Success: false, Error: error.message });
-  }
 };
 
 
@@ -62,9 +62,21 @@ const Post = async (req, res) => {
         const categoriasPadrao = [
             { nome: "Alimentação", tipo: "despesa", cor: "#FF5733", usuario: savedUser._id },
             { nome: "Transporte", tipo: "despesa", cor: "#33C3FF", usuario: savedUser._id },
+            { nome: "Moradia", tipo: "despesa", cor: "#8E44AD", usuario: savedUser._id },
+            { nome: "Saúde", tipo: "despesa", cor: "#E74C3C", usuario: savedUser._id },
+            { nome: "Educação", tipo: "despesa", cor: "#3498DB", usuario: savedUser._id },
+            { nome: "Lazer", tipo: "despesa", cor: "#F39C12", usuario: savedUser._id },
+            { nome: "Compras", tipo: "despesa", cor: "#2ECC71", usuario: savedUser._id },
+            { nome: "Impostos", tipo: "despesa", cor: "#95A5A6", usuario: savedUser._id },
             { nome: "Assinatura", tipo: "despesa", cor: "#1DA1F2", usuario: savedUser._id },
             { nome: "Salário", tipo: "receita", cor: "#28A745", usuario: savedUser._id },
-            { nome: "Investimentos", tipo: "receita", cor: "#FFD700", usuario: savedUser._id }
+            { nome: "Investimentos", tipo: "receita", cor: "#FFD700", usuario: savedUser._id },
+            { nome: "Freelance", tipo: "receita", cor: "#20C997", usuario: savedUser._id },
+            { nome: "Aluguel", tipo: "receita", cor: "#17A2B8", usuario: savedUser._id },
+            { nome: "Prêmios", tipo: "receita", cor: "#FF9800", usuario: savedUser._id },
+            { nome: "Vendas", tipo: "receita", cor: "#9C27B0", usuario: savedUser._id },
+            { nome: "Reembolsos", tipo: "receita", cor: "#6C757D", usuario: savedUser._id },
+            { nome: "Outros", tipo: "receita", cor: "#00BCD4", usuario: savedUser._id }
         ];
 
         await categoriasViewModel.insertMany(categoriasPadrao);
