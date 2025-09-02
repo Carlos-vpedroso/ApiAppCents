@@ -32,12 +32,16 @@ routes.post('/transacao/cadastrar', transacoesController.Post);
 routes.get('/categorias', categoriasController.GetAll);
 routes.get('/categorias/usuario/:usuarioId', categoriasController.GetByUsuarioId);
 routes.post('/categorias/cadastrar', categoriasController.Post);
+routes.put('/categorias/editar/:id', categoriasController.Put);
+routes.delete('/categorias/deletar/:id', categoriasController.Delete);
 //#endregion
 
 //#region ROTAS DAS REQUISICOES DAS METAS
 routes.get('/metas', metasController.GetAll);
 routes.get('/metas/usuario/:usuarioId', metasController.GetByUsuarioId);
 routes.post('/metas/cadastrar', metasController.Post);
+routes.put('/metas/editar/:id', metasController.Put);
+routes.delete('/metas/deletar/:id', metasController.Delete);
 //#endregion
 
 
