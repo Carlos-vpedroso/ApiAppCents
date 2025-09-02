@@ -14,6 +14,7 @@ routes.post('/usuario/login', userController.PostEmail);
 routes.post('/usuario/registrar', userController.Post);
 routes.post('/usuario/refreshToken', userController.RefreshToken);
 routes.put('/usuario/:id', userController.Put);
+routes.put('/usuario/addfoto/:id', userController.UploadFoto);
 routes.delete('/usuario/:id', userController.Delete);
 //#endregion
 

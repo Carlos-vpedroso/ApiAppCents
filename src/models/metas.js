@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const metaSchema = new mongoose.Schema({
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'usuarios', // Referência ao usuário
+        ref: 'usuarios', 
         required: true
     },
     titulo: {

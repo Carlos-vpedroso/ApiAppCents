@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const cloudinary = require('../cloudinary/index')
 const { userViewModel, categoriasViewModel, transacoesViewModel, metasViewModel } = require('../view/managerView');
 
 
@@ -24,7 +25,7 @@ const GetById = async (req, res) => {
             return res.status(400).json({ Success: false, Message: "ID do usuário é obrigatório." });
         }
 
-        const user = await userViewModel.findById(id, 'nome email');
+        const user = await userViewModel.findById(id, 'nome email foto');
 
         if (!user) {
             return res.status(404).json({ Success: false, Message: "Usuário não encontrado." });
@@ -35,7 +36,6 @@ const GetById = async (req, res) => {
         return res.status(500).json({ Success: false, Error: error.message });
     }
 };
-
 
 const Post = async (req, res) => {
     try {
@@ -208,6 +208,43 @@ const RefreshToken = async (req, res) => {
     }
 };
 
+const UploadFoto = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { foto } = req.body;
+
+        if (!foto) {
+            return res.status(400).json({ Success: false, Message: "Nenhuma foto enviada." });
+        }
+
+        const result = await cloudinary.uploader.upload(foto, {
+            folder: "usuarios",
+            public_id: `user_${id}`,
+            overwrite: true,
+        });
+
+        const user = await userModel.findByIdAndUpdate(
+            id,
+            { foto: result.secure_url },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(404).json({ Success: false, Message: "Usuário não encontrado." });
+        }
+
+        res.json({
+            Success: true,
+            Message: "Foto atualizada com sucesso!",
+            Data: user,
+        });
+    } catch (error) {
+        console.error("Erro upload Cloudinary:", error);
+        res.status(500).json({ Success: false, Error: error.message });
+    }
+};
+
+
 module.exports = {
     Get,
     GetById,
@@ -215,5 +252,6 @@ module.exports = {
     Put,
     Delete,
     PostEmail,
-    RefreshToken
+    RefreshToken,
+    UploadFoto,
 };

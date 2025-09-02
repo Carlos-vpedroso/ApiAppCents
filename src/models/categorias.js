@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const categoriaSchema = new mongoose.Schema({
     usuario: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'usuarios', // cada usuário pode ter suas próprias categorias
+        ref: 'usuarios', 
         required: true
     },
     nome: {
@@ -13,11 +13,11 @@ const categoriaSchema = new mongoose.Schema({
     },
     tipo: {
         type: String,
-        enum: ['receita', 'despesa'], // categorias podem ser de receita ou despesa
+        enum: ['receita', 'despesa'], 
         required: true
     },
     cor: {
-        type: String, // opcional, pode ser usado para UI (ex: #FF5733)
+        type: String, 
         default: '#000000',
         match: /^#([0-9A-F]{3}){1,2}$/i
     }
